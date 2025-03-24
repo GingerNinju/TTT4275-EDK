@@ -1,6 +1,6 @@
 clear; clc;
 
-filename = 'data/GenreClassData_30s.txt';
+filename = '../data/GenreClassData_30s.txt';
 selected_features = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo'};
 
 % Read header line

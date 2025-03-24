@@ -43,6 +43,9 @@ for i = 1:N
     y_pred(i) = mode(nearest_labels);
 end
 
+% Save the predictions to a file
+writematrix(y_pred, 'task1_predictions.txt');
+
 % Compute the accuracy
 accuracy = sum(y_pred == y_test) / length(y_test);
 
