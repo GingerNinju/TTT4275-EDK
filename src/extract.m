@@ -1,7 +1,7 @@
 clear; clc;
 
 filename = '../data/GenreClassData_30s.txt';
-selected_features = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo'};
+selected_features = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo', 'zero_cross_rate_mean'};
 
 % Read header line
 fid = fopen(filename, 'r');
@@ -40,4 +40,4 @@ opts.SelectedVariableNames = selected_vars;
 data = readtable(filename, opts);
 
 % Save the data to a new file
-writetable(data, 'features/task1_features.txt', 'Delimiter', '\t');
+writetable(data, 'features/task1_new_features.txt', 'Delimiter', '\t');
