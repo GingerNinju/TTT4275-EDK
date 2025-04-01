@@ -1,9 +1,9 @@
 clear; clc;
 
 % Load the features
-filename = 'features/task1_new_features.txt';
+filename = '../data/GenreClassData_30s.txt';
 data = readtable(filename, 'Delimiter', '\t');
-features = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo', 'zero_cross_rate_mean'};
+features = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo', 'chroma_stft_11_mean'};
 
 % Define matrices
 X = table2array(data(:, features));
@@ -51,27 +51,28 @@ accuracy = sum(y_pred == y_test) / length(y_test);
 
 % Precision
 precision = zeros(10, 1);
-for i = 1:10
+for i = 0:9
     TP = sum(y_pred == i & y_test == i);
+    disp("Class " + i + ": TP = " + TP);
     FP = sum(y_pred == i & y_test ~= i);
+    disp("Class " + i + ": FP = " + FP);
     if (TP + FP) == 0
-        precision(i) = 0;
+        precision(i+1) = 0;
     else
-        precision(i) = TP / (TP + FP);
+        precision(i+1) = TP / (TP + FP);
     end
 end
 avg_precision = mean(precision);
 
 % Recall
 recall = zeros(10, 1);
-for i = 1:10
+for i = 0:9
     TP = sum(y_pred == i & y_test == i);
     FN = sum(y_pred ~= i & y_test == i);
-    recall(i) = TP / (TP + FN);
     if (TP + FN) == 0
-        recall(i) = 0;
+        recall(i+1) = 0;
     else
-        recall(i) = TP / (TP + FN);
+        recall(i+1) = TP / (TP + FN);
     end
 end
 avg_recall = mean(recall);
