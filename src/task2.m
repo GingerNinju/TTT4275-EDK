@@ -1,35 +1,28 @@
-clear; clc;
+clc; clear;
 
-filename = '../data/GenreClassData_30s.txt';
-features_to_remove = {'Track ID', 'GenreID', 'Genre', 'Type', 'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo'};
+filename = "../data/GenreClassData_30s.txt";
 
-% Read header line
-fid = fopen(filename, 'r');
-header_line = fgetl(fid);
-fclose(fid);
+% Read the data
+data = readtable(filename, 'Delimiter', '\t');
+classes_to_plot = [1, 2, 3, 6];
+classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 'Classical'});
 
-% Parse header into column names (char vectors)
-columns = strsplit(header_line, '\t');
-
-% Validate presence of columns to remove
-[is_present, idx_in_header] = ismember(features_to_remove, columns);
-if any(~is_present)
-    missing = features_to_remove(~is_present);
-    error(['Missing columns: ', strjoin(missing, ', ')]);
+% Plot the feature distribution of 'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo' over the classes
+features = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo'};
+for i = 1:length(features)
+    feature = features{i};
+    figure;
+    hold on;
+    for j = 1:length(classes_to_plot)
+        class = classes_to_plot(j);
+        class_data = data(data.GenreID == class, :);
+        % Continuous plot
+        [f, x] = ksdensity(class_data.(feature));
+        plot(x, f, 'LineWidth', 2);
+    end
+    title(['Distribution of ', feature]);
+    xlabel(feature);
+    ylabel('Probability');
+    legend(arrayfun(@(x) classes_to_name_map(x), classes_to_plot, 'UniformOutput', false));
+    hold off;
 end
-
-% Detect import options -- Used to convert column names with spaces to MATLAB's variable names
-opts = detectImportOptions(filename, 'Delimiter', '\t');
-
-% Map original names to MATLAB variable names
-original_to_variable = containers.Map(columns, opts.VariableNames);
-
-% Convert features to remove to MATLAB's version
-vars_to_remove = cellfun(@(c) original_to_variable(c), features_to_remove, 'UniformOutput', false);
-
-% Select only variables not in the removal list
-opts.SelectedVariableNames = setdiff(opts.VariableNames, vars_to_remove);
-data = readtable(filename, opts);
-
-% Save the data to a new file
-writetable(data, 'features/task2_filtered_features.txt', 'Delimiter', '\t');

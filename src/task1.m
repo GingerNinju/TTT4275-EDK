@@ -93,3 +93,9 @@ disp("Precision (per class):");
 disp(precision);
 disp("Recall (per class):");
 disp(recall);
+
+% Add genre name before each value
+genre_names = {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 'Hip-Hop', 'Country', 'Jazz'};
+for i = 1:length(precision)
+    disp("Class " + genre_names{i} + ": Precision = " + precision(i) + ", Recall = " + recall(i));
+end

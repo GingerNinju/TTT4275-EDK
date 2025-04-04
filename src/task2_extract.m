@@ -1,7 +1,7 @@
 clear; clc;
 
 filename = '../data/GenreClassData_30s.txt';
-features_to_remove = {'Track ID', 'GenreID', 'Genre', 'Type', 'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo'};
+features_to_remove = {'Track ID', 'File', 'Genre', 'Type', 'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo'};
 
 % Read header line
 fid = fopen(filename, 'r');
