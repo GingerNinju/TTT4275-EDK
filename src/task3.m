@@ -6,7 +6,7 @@ classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 
 % Load the features
 filename = '../data/GenreClassData_30s.txt';
 data = readtable(filename, 'Delimiter', '\t');
-features = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'spectral_rolloff_var'}; % spectral_bandwidth_var, mfcc_9_std (8 & 7 too), mfcc_5_std
+features = {'zero_cross_rate_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo'}; % spectral_bandwidth_var, mfcc_9_std (8 & 7 too), mfcc_5_std
 
 % Define matrices
 X = table2array(data(:, features));
