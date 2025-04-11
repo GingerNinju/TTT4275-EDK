@@ -1,12 +1,12 @@
 clear;
 
-classes_to_plot = [1, 2, 3, 6];
-classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 'Classical'});
+classes_to_plot = [1, 2, 3, 4, 5, 6, 10];
+classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Jazz'});
 
 % Load the features
 filename = '../data/GenreClassData_30s.txt';
 data = readtable(filename, 'Delimiter', '\t');
-features = {'zero_cross_rate_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo'};
+features = {'mfcc_9_mean', 'mfcc_1_mean', 'mfcc_8_std', 'spectral_contrast_mean'}; % spectral_contrast_mean (blues .39)
 
 % Define matrices
 X = table2array(data(:, features));
@@ -31,27 +31,6 @@ axis square;
 colormap('jet');
 % Set the color limits
 clim([-1 1]);
-
-maximums = zeros(length(features), length(classes_to_plot));
-
-% KDE Plot
-figure;
-for f = 1:length(features)
-    subplot(2, 3, f); hold on;
-    for i = 1:4
-        c = classes_to_plot(i); % Current class
-        idx = labels == c; % Indices of the current class
-        ksdensity(X(idx, f));
-
-        maximums(f, i) = max(ksdensity(X(idx, f)));
-
-    end
-
-    title(['KDE Plot of ', strrep(features{f}, '_', '\_')]);
-    xlabel('Feature Value'); ylabel('Density');
-    legend(values(classes_to_name_map));
-    hold off;
-end
 
 % Split the data into training and testing sets.
 train_indices = strcmp(data.Type, 'Train'); test_indices = strcmp(data.Type, 'Test');
@@ -101,6 +80,31 @@ for i = 0:9
     end
 end
 avg_precision = mean(precision);
+
+maximums = zeros(length(features), length(classes_to_plot));
+
+% KDE Plot
+figure;
+colors = lines(length(classes_to_plot)); % Use distinguishable colors
+figure;
+for f = 1:length(features)
+    subplot(2, 2, f); hold on;
+    for i = 1:length(classes_to_plot)
+        c = classes_to_plot(i); % Current class
+        idx = labels == c - 1; % Indices of the current class
+        [density, x] = ksdensity(X(idx, f));
+
+        % Adjust line width for better visualization
+        plot(x, density, 'LineWidth', 2, 'Color', colors(i, :));
+
+        maximums(f, i) = max(density);
+    end
+
+    title(['KDE Plot of ', strrep(features{f}, '_', '\_')]);
+    xlabel('Feature Value'); ylabel('Density');
+    legend(values(classes_to_name_map), 'Location', 'Best');
+    hold off;
+end
 
 % Recall
 recall = zeros(10, 1);
