@@ -65,7 +65,7 @@ for i = 1:N
 end
 
 % Save the predictions to a file
-writematrix(y_pred, '../output/task1_predictions.txt');
+writematrix(y_pred, '../output/task3_predictions.txt');
 
 % Compute the accuracy
 accuracy = sum(y_pred == y_test) / length(y_test);

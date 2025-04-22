@@ -4,9 +4,11 @@ classes_to_plot = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 'Hip-Hop', 'Country', 'Jazz'});
 
 % Load the features
-filename = '../data/GenreClassData_30s.txt';
+filename = '../data/GenreClassData_10s.txt';
 data = readtable(filename, 'Delimiter', '\t');
-features = {'spectral_flatness_mean', 'spectral_flatness_var'};
+features = {'spectral_flatness_mean', 'spectral_flatness_var', 'mfcc_4_mean', 'mfcc_8_std', 'mfcc_4_std', 'mfcc_11_mean', 'mfcc_12_std', ...
+ 'mfcc_5_mean', 'chroma_stft_7_std', 'mfcc_1_std', 'mfcc_10_mean', 'mfcc_9_mean', 'mfcc_8_mean', 'mfcc_3_mean', 'chroma_stft_11_mean', ...
+ 'spectral_contrast_mean', 'spectral_bandwidth_mean', 'rmse_var', 'rmse_mean'};
 
 % Define matrices
 X = table2array(data(:, features));
@@ -44,7 +46,7 @@ for i = 1:N
 end
 
 % Save the predictions to a file
-writematrix(y_pred, 'task1_predictions.txt');
+writematrix(y_pred, '../output/task4_predictions.txt');
 
 % Compute the accuracy
 accuracy = sum(y_pred == y_test) / length(y_test);
@@ -63,30 +65,6 @@ for i = 0:9
     end
 end
 avg_precision = mean(precision);
-
-maximums = zeros(length(features), length(classes_to_plot));
-
-% KDE Plot
-colors = lines(length(classes_to_plot)); % Use distinguishable colors
-for f = 1:length(features)
-    figure;
-    hold on;
-    for i = 1:length(classes_to_plot)
-        c = classes_to_plot(i); % Current class
-        idx = labels == c - 1; % Indices of the current class
-        [density, x] = ksdensity(X(idx, f));
-
-        % Adjust line width for better visualization
-        plot(x, density, 'LineWidth', 2, 'Color', colors(i, :));
-
-        maximums(f, i) = max(density);
-    end
-
-    title(['KDE Plot of ', strrep(features{f}, '_', '\_')]);
-    xlabel('Feature Value'); ylabel('Density');
-    legend(values(classes_to_name_map), 'Location', 'Best');
-    hold off;
-end
 
 % Recall
 recall = zeros(10, 1);
@@ -119,5 +97,3 @@ genre_names = {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 
 for i = 1:length(precision)
     disp("Class " + genre_names{i} + ": Precision = " + precision(i) + ", Recall = " + recall(i));
 end
-
-disp(maximums)

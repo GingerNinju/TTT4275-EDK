@@ -21,10 +21,22 @@ feature_names = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean
     'mfcc_2_std', 'mfcc_3_std', 'mfcc_4_std', 'mfcc_5_std', ...
     'mfcc_6_std', 'mfcc_7_std', 'mfcc_8_std', 'mfcc_9_std', ...
     'mfcc_10_std', 'mfcc_11_std', 'mfcc_12_std'};
-colors = lines(4);
+
+colors = [
+    0.0, 0.0, 0.0       % black
+    0.9, 0.6, 0.0       % orange
+    0.35, 0.7, 0.9      % sky blue
+    0.0, 0.6, 0.5       % teal
+    0.95, 0.9, 0.25     % yellow
+    0.8, 0.4, 0.0       % dark orange
+    0.8, 0.6, 0.7       % light purple
+    0.0, 0.45, 0.7      % blue
+    0.6, 0.6, 0.6       % grey
+    0.8, 0.0, 0.0       % red
+];
 
 % Load the data
-filename = '../data/GenreClassData_30s.txt';
+filename = '../data/GenreClassData_10s.txt';
 data = readtable(filename, 'Delimiter', '\t');
 X = table2array(data(:, feature_names));
 labels = table2array(data(:, 'GenreID'));
@@ -32,7 +44,6 @@ labels = table2array(data(:, 'GenreID'));
 % Normalize the data
 X = (X - mean(X)) ./ std(X);
 
-colors = lines(length(classes_to_plot)); % Use distinguishable colors
 % KDE Plot
 for f = 1:length(feature_names)
     figure;
