@@ -1,7 +1,7 @@
 clear; clc;
 
-classes_to_plot = [1, 2, 3, 4, 5, 6, 10];
-classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Jazz'});
+classes_to_plot = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 'Hip-Hop', 'Country', 'Jazz'});
 feature_names = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo', 'zero_cross_rate_mean', 'zero_cross_rate_std', ...
     'rmse_mean', 'rmse_var', 'spectral_centroid_var', ...
     'spectral_bandwidth_mean', 'spectral_bandwidth_var', ...

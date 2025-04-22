@@ -6,7 +6,7 @@ classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 
 % Load the features
 filename = '../data/GenreClassData_30s.txt';
 data = readtable(filename, 'Delimiter', '\t');
-features = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_flatness_mean', 'tempo'};
+features = {'spectral_centroid_mean', 'mfcc_1_mean', 'spectral_flatness_mean', 'tempo'};
 
 % Define matrices
 X = table2array(data(:, features));
@@ -15,29 +15,12 @@ labels = table2array(data(:, 'GenreID')); % GenreID is the class label
 % Normalize features (z-score)
 X = zscore(X); % What this does is it subtracts the mean of each feature and divides by the standard deviation
 
-% Normalize features (min-max)
-% X = (X - min(X)) ./ (max(X) - min(X)); % This is the min-max normalization
-
-% Compute correlation matrices
-corr_matrix = corr(X);
-figure;
-imagesc(corr_matrix);
-colorbar;
-title('Correlation Matrix');
-xlabel('Features'); ylabel('Features');
-set(gca, 'XTick', 1:length(features), 'XTickLabel', features, 'YTick', 1:length(features), 'YTickLabel', features);
-axis square;
-% Set the colormap
-colormap('jet');
-% Set the color limits
-clim([-1 1]);
-
 maximums = zeros(length(features), length(classes_to_plot));
 
 % KDE Plot
-figure;
 for f = 1:length(features)
-    subplot(2, 3, f); hold on;
+    figure;
+    hold on;
     for i = 1:4
         c = classes_to_plot(i); % Current class
         idx = labels == c; % Indices of the current class

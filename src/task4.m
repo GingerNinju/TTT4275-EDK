@@ -1,12 +1,12 @@
 clear;
 
-classes_to_plot = [1, 2, 3, 4, 5, 6, 10];
-classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Jazz'});
+classes_to_plot = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 'Hip-Hop', 'Country', 'Jazz'});
 
 % Load the features
 filename = '../data/GenreClassData_30s.txt';
 data = readtable(filename, 'Delimiter', '\t');
-features = {'mfcc_9_mean', 'mfcc_1_mean', 'mfcc_8_std', 'spectral_contrast_mean'}; % spectral_contrast_mean (blues .39)
+features = {'spectral_flatness_mean', 'spectral_flatness_var'};
 
 % Define matrices
 X = table2array(data(:, features));
@@ -14,23 +14,6 @@ labels = table2array(data(:, 'GenreID')); % GenreID is the class label
 
 % Normalize features (z-score)
 X = zscore(X); % What this does is it subtracts the mean of each feature and divides by the standard deviation
-
-% Normalize features (min-max)
-% X = (X - min(X)) ./ (max(X) - min(X)); % This is the min-max normalization
-
-% Compute correlation matrices
-corr_matrix = corr(X);
-figure;
-imagesc(corr_matrix);
-colorbar;
-title('Correlation Matrix');
-xlabel('Features'); ylabel('Features');
-set(gca, 'XTick', 1:length(features), 'XTickLabel', features, 'YTick', 1:length(features), 'YTickLabel', features);
-axis square;
-% Set the colormap
-colormap('jet');
-% Set the color limits
-clim([-1 1]);
 
 % Split the data into training and testing sets.
 train_indices = strcmp(data.Type, 'Train'); test_indices = strcmp(data.Type, 'Test');
@@ -84,11 +67,10 @@ avg_precision = mean(precision);
 maximums = zeros(length(features), length(classes_to_plot));
 
 % KDE Plot
-figure;
 colors = lines(length(classes_to_plot)); % Use distinguishable colors
-figure;
 for f = 1:length(features)
-    subplot(2, 2, f); hold on;
+    figure;
+    hold on;
     for i = 1:length(classes_to_plot)
         c = classes_to_plot(i); % Current class
         idx = labels == c - 1; % Indices of the current class

@@ -10,10 +10,7 @@ X = table2array(data(:, features));
 labels = table2array(data(:, 'GenreID')); % GenreID is the class label
 
 % Normalize features (z-score)
-% X = zscore(X); % What this does is it subtracts the mean of each feature and divides by the standard deviation
-
-% Normalize features (min-max)
-X = (X - min(X)) ./ (max(X) - min(X)); % This is the min-max normalization
+X = zscore(X); % What this does is it subtracts the mean of each feature and divides by the standard deviation
 
 % Split the data into training and testing sets.
 train_indices = strcmp(data.Type, 'Train'); test_indices = strcmp(data.Type, 'Test');
