@@ -1,0 +1,22 @@
+Class Pop: Precision = 0.36364, Recall = 0.6
+Class Metal: Precision = 0.4, Recall = 0.5
+Class Disco: Precision = 0.27778, Recall = 0.25
+Class Blues: Precision = 0.5, Recall = 0.35
+Class Reggae: Precision = 0.66667, Recall = 0.73684
+Class Classical: Precision = 0.076923, Recall = 0.05
+Class Rock: Precision = 0.57143, Recall = 0.4
+Class Hip-Hop: Precision = 0.27273, Recall = 0.15789
+Class Country: Precision = 0.36842, Recall = 0.35
+Class Jazz: Precision = 0, Recall = 0
+
+
+Class Pop: Precision = 0.46429, Recall = 0.65
+Class Metal: Precision = 0.37143, Recall = 0.65
+Class Disco: Precision = 0.33333, Recall = 0.3
+Class Blues: Precision = 0.28571, Recall = 0.3
+Class Reggae: Precision = 0.5, Recall = 0.4
+Class Classical: Precision = 0.61905, Recall = 0.68421
+Class Rock: Precision = 0.125, Recall = 0.1
+Class Hip-Hop: Precision = 0.58333, Recall = 0.35
+Class Country: Precision = 0.27273, Recall = 0.15789
+Class Jazz: Precision = 0.35, Recall = 0.35
