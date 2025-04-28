@@ -33,7 +33,8 @@ y_pred = zeros(N, 1);
 % Loop over each test sample
 for i = 1:N
     % Computing the distance between the test sample and all training samples
-    distances = sqrt(sum((X_train - X_test(i, :)).^2, 2));
+    % distances = sqrt(sum((X_train - X_test(i, :)).^2, 2)); % Euclidean distance
+    distances = sum(abs(X_train - X_test(i, :)), 2); % Manhattan distance
 
     % Finding the k nearest neighbors
     [~, indices] = mink(distances, k);
@@ -97,3 +98,20 @@ genre_names = {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 
 for i = 1:length(precision)
     disp("Class " + genre_names{i} + ": Precision = " + precision(i) + ", Recall = " + recall(i));
 end
+
+% Plot histogram of class precisions
+figure;
+bar(precision);
+hold on;
+
+% Add a dotted line for the mean precision
+yline(avg_precision, '--r');
+
+% Add labels and title
+xticks(1:10);
+xticklabels(genre_names);
+xlabel('Genre');
+ylabel('Acc');
+title('Class Accuracy Histogram');
+grid on;
+hold off;

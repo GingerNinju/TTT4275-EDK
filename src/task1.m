@@ -10,13 +10,16 @@ X = table2array(data(:, features));
 labels = table2array(data(:, 'GenreID')); % GenreID is the class label
 
 % Normalize features (z-score)
-X = zscore(X); % What this does is it subtracts the mean of each feature and divides by the standard deviation
+X = zscore(X);
 
-% Split the data into training and testing sets.
-train_indices = strcmp(data.Type, 'Train'); test_indices = strcmp(data.Type, 'Test');
+% Split the data into training and testing sets
+train_indices = strcmp(data.Type, 'Train');
+test_indices = strcmp(data.Type, 'Test');
 
-X_train = X(train_indices, :); X_test = X(test_indices, :);
-y_train = labels(train_indices); y_test = labels(test_indices);
+X_train = X(train_indices, :);
+X_test = X(test_indices, :);
+y_train = labels(train_indices);
+y_test = labels(test_indices);
 N = size(X_test, 1);
 
 % k is the number of neighbors to consider
@@ -28,7 +31,7 @@ y_pred = zeros(N, 1);
 % Loop over each test sample
 for i = 1:N
     % Computing the distance between the test sample and all training samples
-    distances = sqrt(sum((X_train - X_test(i, :)).^2, 2));
+    distances = sum(abs(X_train - X_test(i, :)), 2); % Manhattan distance
 
     % Finding the k nearest neighbors
     [~, indices] = mink(distances, k);
@@ -64,7 +67,6 @@ recall = zeros(10, 1);
 for i = 1:10
     TP = sum(y_pred == i & y_test == i);
     FN = sum(y_pred ~= i & y_test == i);
-    recall(i) = TP / (TP + FN);
     if (TP + FN) == 0
         recall(i) = 0;
     else
@@ -81,18 +83,23 @@ disp(avg_precision);
 disp('Avg recall:');
 disp(avg_recall);
 
-% Confusion matrix
-C = confusionmat(y_test, y_pred);
-disp('Confusion matrix:');
-disp(C);
-
 disp("Precision (per class):");
 disp(precision);
 disp("Recall (per class):");
 disp(recall);
 
-% Add genre name before each value
+% Confusion matrix (figure)
+C = confusionmat(y_test, y_pred);
+
 genre_names = {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 'Hip-Hop', 'Country', 'Jazz'};
+
+figure;
+confusionchart(C, genre_names, 'Title', 'Confusion Matrix', ...
+    'RowSummary','row-normalized', 'ColumnSummary','column-normalized');
+colormap('parula');
+grid on;
+
+% Display precision and recall per class
 for i = 1:length(precision)
     disp("Class " + genre_names{i} + ": Precision = " + precision(i) + ", Recall = " + recall(i));
 end

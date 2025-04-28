@@ -6,7 +6,7 @@ classes_to_name_map = containers.Map(classes_to_plot, {'Pop', 'Metal', 'Disco', 
 % Load the features
 filename = '../data/GenreClassData_30s.txt';
 data = readtable(filename, 'Delimiter', '\t');
-features = {'spectral_centroid_mean', 'mfcc_1_mean', 'spectral_flatness_mean', 'tempo'};
+features = {'spectral_centroid_mean', 'mfcc_1_mean', 'spectral_rolloff_mean', 'spectral_flatness_mean'};
 
 % Define matrices
 X = table2array(data(:, features));
@@ -52,7 +52,8 @@ y_pred = zeros(N, 1);
 % Loop over each test sample
 for i = 1:N
     % Computing the distance between the test sample and all training samples
-    distances = sqrt(sum((X_train - X_test(i, :)).^2, 2));
+    % distances = sqrt(sum((X_train - X_test(i, :)).^2, 2)); % Euclidean distance
+    distances = sum(abs(X_train - X_test(i, :)), 2); % Manhattan distance
 
     % Finding the k nearest neighbors
     [~, indices] = mink(distances, k);
