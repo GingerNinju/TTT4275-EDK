@@ -51,26 +51,28 @@ accuracy = sum(y_pred == y_test) / length(y_test);
 
 % Precision
 precision = zeros(10, 1);
-for i = 1:10
+for i = 0:9
     TP = sum(y_pred == i & y_test == i);
+    disp("Class " + i + ": TP = " + TP);
     FP = sum(y_pred == i & y_test ~= i);
+    disp("Class " + i + ": FP = " + FP);
     if (TP + FP) == 0
-        precision(i) = 0;
+        precision(i+1) = 0;
     else
-        precision(i) = TP / (TP + FP);
+        precision(i+1) = TP / (TP + FP);
     end
 end
 avg_precision = mean(precision);
 
 % Recall
 recall = zeros(10, 1);
-for i = 1:10
+for i = 0:9
     TP = sum(y_pred == i & y_test == i);
     FN = sum(y_pred ~= i & y_test == i);
     if (TP + FN) == 0
-        recall(i) = 0;
+        recall(i+1) = 0;
     else
-        recall(i) = TP / (TP + FN);
+        recall(i+1) = TP / (TP + FN);
     end
 end
 avg_recall = mean(recall);
@@ -83,13 +85,16 @@ disp(avg_precision);
 disp('Avg recall:');
 disp(avg_recall);
 
-disp("Precision (per class):");
-disp(precision);
-disp("Recall (per class):");
-disp(recall);
-
-% Confusion matrix (figure)
+% Confusion matrix
 C = confusionmat(y_test, y_pred);
+disp('Confusion matrix:');
+disp(C);
+
+% Add genre name before each value
+genre_names = {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 'Hip-Hop', 'Country', 'Jazz'};
+for i = 1:length(precision)
+    disp("Class " + genre_names{i} + ": Precision = " + precision(i) + ", Recall = " + recall(i));
+end
 
 genre_names = {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 'Hip-Hop', 'Country', 'Jazz'};
 
@@ -98,8 +103,3 @@ confusionchart(C, genre_names, 'Title', 'Confusion Matrix', ...
     'RowSummary','row-normalized', 'ColumnSummary','column-normalized');
 colormap('parula');
 grid on;
-
-% Display precision and recall per class
-for i = 1:length(precision)
-    disp("Class " + genre_names{i} + ": Precision = " + precision(i) + ", Recall = " + recall(i));
-end

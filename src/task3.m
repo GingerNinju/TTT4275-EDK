@@ -117,5 +117,3 @@ genre_names = {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 
 for i = 1:length(precision)
     disp("Class " + genre_names{i} + ": Precision = " + precision(i) + ", Recall = " + recall(i));
 end
-
-disp(maximums)
