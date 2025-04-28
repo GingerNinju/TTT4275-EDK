@@ -21,13 +21,13 @@ maximums = zeros(length(features), length(classes_to_plot));
 for f = 1:length(features)
     figure;
     hold on;
-    for i = 1:4
+    for i = 1:length(classes_to_plot)
         c = classes_to_plot(i); % Current class
-        idx = labels == c; % Indices of the current class
-        ksdensity(X(idx, f));
+        idx = labels == c-1; % Indices of the current class
+        [density, x] = ksdensity(X(idx, f));
+        plot(x, density, 'LineWidth', 2); % Increase line width to 2
 
-        maximums(f, i) = max(ksdensity(X(idx, f)));
-
+        maximums(f, i) = max(density);
     end
 
     title(['KDE Plot of ', strrep(features{f}, '_', '\_')]);
@@ -117,3 +117,9 @@ genre_names = {'Pop', 'Metal', 'Disco', 'Blues', 'Reggae', 'Classical', 'Rock', 
 for i = 1:length(precision)
     disp("Class " + genre_names{i} + ": Precision = " + precision(i) + ", Recall = " + recall(i));
 end
+
+figure;
+confusionchart(C, genre_names, 'Title', 'Confusion Matrix', ...
+    'RowSummary','row-normalized', 'ColumnSummary','column-normalized');
+colormap('parula');
+grid on;

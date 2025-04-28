@@ -17,7 +17,6 @@ genreID = data.GenreID; % Preserve the GenreID column
 data = array2table(X, 'VariableNames', features);
 data.GenreID = genreID; % Reattach the GenreID column
 
-figure;
 for i = 1:length(features)
     feature = features{i};
 
@@ -51,19 +50,34 @@ for i = 1:length(features)
                 classes_to_name_map(classes_to_plot(k)), bd);
         end
     end
+end
 
-    subplot(2, 2, i);
-    hold on;
-    for j = 1:length(classes_to_plot)
-        class = classes_to_plot(j);
-        class_data = data(data.GenreID == class, :);
-        % Continuous plot
-        [f, x] = ksdensity(class_data.(feature));
-        plot(x, f, 'LineWidth', 2);
+% Scatter plots for every pair of features
+figure;
+plot_idx = 1;
+for i = 1:length(features)
+    for j = i+1:length(features)
+        subplot(2, 3, plot_idx);
+        hold on;
+        for k = 1:length(classes_to_plot)
+            class = classes_to_plot(k);
+            class_data = data(data.GenreID == class, :);
+            scatter(class_data.(features{i}), class_data.(features{j}), 10, 'filled', 'DisplayName', classes_to_name_map(class));
+            
+            % Compute and plot the barycenter
+            barycenter_x = mean(class_data.(features{i}));
+            barycenter_y = mean(class_data.(features{j}));
+            scatter(barycenter_x, barycenter_y, 50, 'x', 'LineWidth', 1.5, 'DisplayName', [classes_to_name_map(class), ' Barycenter']);
+        end
+        xlabel(features{i});
+        ylabel(features{j});
+    
+        if plot_idx == 1
+            legend('show');
+        end
+        title(['Scatter: ', features{i}, ' vs ', features{j}]);
+        set(findobj(gca, 'Type', 'Scatter', '-and', 'Marker', 'x'), 'SizeData', 300); % Increase width of crosses
+        hold off;
+        plot_idx = plot_idx + 1;
     end
-    title(['Distribution of ', feature]);
-    xlabel(feature);
-    ylabel('Probability');
-    legend(arrayfun(@(x) classes_to_name_map(x), classes_to_plot, 'UniformOutput', false));
-    hold off;
 end

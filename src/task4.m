@@ -115,3 +115,9 @@ ylabel('Acc');
 title('Class Accuracy Histogram');
 grid on;
 hold off;
+
+figure;
+confusionchart(C, genre_names, 'Title', 'Confusion Matrix', ...
+    'RowSummary','row-normalized', 'ColumnSummary','column-normalized');
+colormap('parula');
+grid on;
