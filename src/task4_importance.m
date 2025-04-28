@@ -29,8 +29,8 @@ for f = 1:num_features
             x2 = X(labels == c2, f);
             
             % Estimate distributions
-            [pdf1, xi1] = ksdensity(x1);
-            [pdf2, xi2] = ksdensity(x2);
+            [~, xi1] = ksdensity(x1);
+            [~, xi2] = ksdensity(x2);
             
             % Ensure both PDFs use the same grid points
             min_x = min(min(xi1), min(xi2));
@@ -72,8 +72,3 @@ set(gca, 'YTick', 1:5, 'YTickLabel', top_features);
 xlabel('Average Bhattacharyya Distance (Higher = More Discriminative)');
 title('Top 5 Most Discriminative Features');
 grid on;
-
-% Save results to CSV for reporting (CORRECTED VERSION)
-results = table(top_features(:), top_scores(:), ...
-               'VariableNames', {'Feature', 'DiscriminativeScore'});
-writetable(results, 'top_discriminative_features.csv');
