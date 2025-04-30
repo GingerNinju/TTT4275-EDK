@@ -1,7 +1,7 @@
 clear; clc;
 
 % Load the features
-filename = 'features/task1_features.txt';
+filename = '../data/GenreClassData_30s.txt';
 data = readtable(filename, 'Delimiter', '\t');
 features = {'spectral_rolloff_mean', 'mfcc_1_mean', 'spectral_centroid_mean', 'tempo'};
 

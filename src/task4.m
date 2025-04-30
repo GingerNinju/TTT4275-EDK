@@ -33,8 +33,8 @@ y_pred = zeros(N, 1);
 % Loop over each test sample
 for i = 1:N
     % Computing the distance between the test sample and all training samples
-    % distances = sqrt(sum((X_train - X_test(i, :)).^2, 2)); % Euclidean distance
-    distances = sum(abs(X_train - X_test(i, :)), 2); % Manhattan distance
+    distances = sqrt(sum((X_train - X_test(i, :)).^2, 2)); % Euclidean distance
+    % distances = sum(abs(X_train - X_test(i, :)), 2); % Manhattan distance
 
     % Finding the k nearest neighbors
     [~, indices] = mink(distances, k);
