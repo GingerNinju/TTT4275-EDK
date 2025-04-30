@@ -2,6 +2,11 @@
 
 This project implements various tasks for genre classification using audio features extracted from music tracks. The tasks include feature extraction, data visualization, k-Nearest Neighbors (k-NN) classification, and feature importance analysis.
 
+---
+
+**THE DATA HAS TO BE PUT IN A `data/` DIR, AT THE ROOT OF THE PROJECT.**\\
+**THE NAME OF THE FILES MUST BE `GenreClassData_10s.txt` AND `GenreClassData_30s.txt`.**
+
 ## Project Structure
 
 - **`src/`**: Contains MATLAB scripts for different tasks.
